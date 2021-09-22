@@ -2,114 +2,26 @@ import NoteContext from "./noteContext";
 import { useState } from "react";
 
 const NoteState = (props)=>{
-
-    const notesInitial = [
-        {
-            "_id": "613901ae093fbffe2265adb6",
-            "user": "6138fe87093fbffe2265adae",
-            "title": "Second Note",
-            "description": "Lorem Ipsum baar baar likhoo!",
-            "tag": "general",
-            "date": "2021-09-08T18:32:14.282Z",
-            "__v": 0
-          },
-          {
-            "_id": "613901ba093fbffe2265adba",
-            "user": "6138fe87093fbffe2265adae",
-            "title": "Fourth Note",
-            "description": "Lorem Ipsum baar baar likhoo!",
-            "tag": "general",
-            "date": "2021-09-08T18:32:26.254Z",
-            "__v": 0
-          },
-          {
-            "_id": "613901bf093fbffe2265adbc",
-            "user": "6138fe87093fbffe2265adae",
-            "title": "Fifth Note",
-            "description": "Lorem Ipsum baar baar likhoo!",
-            "tag": "general",
-            "date": "2021-09-08T18:32:31.327Z",
-            "__v": 0
-          },
-          {
-            "_id": "613ca2994b403151d3beb069",
-            "user": "6138fe87093fbffe2265adae",
-            "title": "Fifth Note",
-            "description": "Lorem Ipsum baar baar likhoo!",
-            "tag": "general",
-            "date": "2021-09-11T12:35:37.080Z",
-            "__v": 0
-          },
-          {
-            "_id": "613ca29a4b403151d3beb06b",
-            "user": "6138fe87093fbffe2265adae",
-            "title": "Fifth Note",
-            "description": "Lorem Ipsum baar baar likhoo!",
-            "tag": "general",
-            "date": "2021-09-11T12:35:38.064Z",
-            "__v": 0
-          },
-          {
-            "_id": "613ca29a4b403151d3beb06d",
-            "user": "6138fe87093fbffe2265adae",
-            "title": "Fifth Note",
-            "description": "Lorem Ipsum baar baar likhoo!",
-            "tag": "general",
-            "date": "2021-09-11T12:35:38.688Z",
-            "__v": 0
-          },
-          {
-            "_id": "613901ae093fbffe2265adb6",
-            "user": "6138fe87093fbffe2265adae",
-            "title": "Second Note",
-            "description": "Lorem Ipsum baar baar likhoo!",
-            "tag": "general",
-            "date": "2021-09-08T18:32:14.282Z",
-            "__v": 0
-          },
-          {
-            "_id": "613901ba093fbffe2265adba",
-            "user": "6138fe87093fbffe2265adae",
-            "title": "Fourth Note",
-            "description": "Lorem Ipsum baar baar likhoo!",
-            "tag": "general",
-            "date": "2021-09-08T18:32:26.254Z",
-            "__v": 0
-          },
-          {
-            "_id": "613901bf093fbffe2265adbc",
-            "user": "6138fe87093fbffe2265adae",
-            "title": "Fifth Note",
-            "description": "Lorem Ipsum baar baar likhoo!",
-            "tag": "general",
-            "date": "2021-09-08T18:32:31.327Z",
-            "__v": 0
-          },
-          {
-            "_id": "613ca2994b403151d3beb069",
-            "user": "6138fe87093fbffe2265adae",
-            "title": "Fifth Note",
-            "description": "Lorem Ipsum baar baar likhoo!",
-            "tag": "general",
-            "date": "2021-09-11T12:35:37.080Z",
-            "__v": 0
-          },
-          {
-            "_id": "613ca29a4b403151d3beb06b",
-            "user": "6138fe87093fbffe2265adae",
-            "title": "Fifth Note",
-            "description": "Lorem Ipsum baar baar likhoo!",
-            "tag": "general",
-            "date": "2021-09-11T12:35:38.064Z",
-            "__v": 0
-          },
-          
-      ]
+    const host = "http://localhost:5000"
+    const notesInitial = []
 
     const [notes, setNotes] = useState(notesInitial)
 
+    const getNotes = async()=>{
+
+      const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjEzOGZlODcwOTNmYmZmZTIyNjVhZGFlIn0sImlhdCI6MTYzMTEyNTEzNX0.EluGU7XoU1o0zZrSW-ei1Lbwu58ED8w9BV5NU2OwNh4'
+        }
+      });
+      const json = await response.json()
+      console.log(json)
+      setNotes(json)
+    }
     //Add a note
-    const addNote = (title, description, tag)=>{
+    const addNote = async(title, description, tag)=>{
       console.log("Adding a new note!")
       const note = {
         "_id": "613ca29a4b403151d3beb06d",
@@ -120,6 +32,18 @@ const NoteState = (props)=>{
         "date": "2021-09-11T12:35:38.688Z",
         "__v": 0
       }
+
+      const response = await fetch(`${host}/api/notes/addnote`, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjEzOGZlODcwOTNmYmZmZTIyNjVhZGFlIn0sImlhdCI6MTYzMTEyNTEzNX0.EluGU7XoU1o0zZrSW-ei1Lbwu58ED8w9BV5NU2OwNh4'
+        },
+        body: JSON.stringify({title, description, tag})
+      });
+
+      const json = response.json();
+
       setNotes(notes.concat(note));
     }
 
@@ -131,12 +55,31 @@ const NoteState = (props)=>{
     }
 
     //Update a note
-    const editNote = (id)=>{
-      
+    const editNote = async(id, title, description, tag)=>{
+
+      const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjEzOGZlODcwOTNmYmZmZTIyNjVhZGFlIn0sImlhdCI6MTYzMTEyNTEzNX0.EluGU7XoU1o0zZrSW-ei1Lbwu58ED8w9BV5NU2OwNh4'
+        },
+        body: JSON.stringify({title, description, tag})
+      });
+
+      const json = response.json();
+
+      for(let index = 0 ; index < notes.length; index++){
+        const element = notes[index];
+        if(element._id === id){
+          element.title = title;
+          element.description = description;
+          element.tag = tag;
+        }
+      }
     }
 
     return(
-        <NoteContext.Provider value={{notes , addNote , deleteNote , editNote}}>
+        <NoteContext.Provider value={{notes , addNote , deleteNote , editNote, getNotes}}>
             {props.children}
         </NoteContext.Provider>
     )
